@@ -1,0 +1,48 @@
+### ========== 毛选 DeepAgent · 接口测试（PyCharm HTTP Client）==========
+### 使用方法：打开本文件 → 每个请求上方有绿色箭头 ▶ → 点击发送 → 下方 Run 窗口看结果
+### 前提：先运行 main 配置（服务监听 http://127.0.0.1:5000）
+
+### ① 健康检查（服务是否活着）
+GET http://127.0.0.1:5000/health
+
+### ② 查看工作流输入/输出格式
+GET http://127.0.0.1:5000/graph_parameter
+
+### ③ 完整分析：标准示例（等 1-2 分钟，DeepSeek-v4-flash 生成报告）
+POST http://127.0.0.1:5000/run
+Content-Type: application/json
+
+{
+  "user_question": "团队执行力差，主要问题应该怎么找？",
+  "theme_codes": [],
+  "output_mode": "analysis_table"
+}
+
+### ④ 完整分析：换你的问题（改 user_question 即可；theme_codes 可预选主题）
+POST http://127.0.0.1:5000/run
+Content-Type: application/json
+
+{
+  "user_question": "我该不该辞职去创业？",
+  "theme_codes": ["03", "04"],
+  "output_mode": "analysis_table"
+}
+
+### ⑤ 流式运行（SSE，边生成边返回）
+POST http://127.0.0.1:5000/stream_run
+Content-Type: application/json
+
+{
+  "user_question": "跨部门协作推不动怎么办？",
+  "theme_codes": [],
+  "output_mode": "analysis_table"
+}
+
+### ⑥ 单节点调试：只看主题识别（秒回，不需要 LLM）
+POST http://127.0.0.1:5000/node_run/theme_router_node
+Content-Type: application/json
+
+{
+  "user_question": "项目失败了，我该不该做复盘？",
+  "theme_codes": []
+}
